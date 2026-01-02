@@ -1,0 +1,172 @@
+// Import Bootstrap
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Custom Variables
+$primary-color: #0d6efd;
+$success-color: #198754;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+
+// Custom Styles
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1rem 1.5rem;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+  }
+}
+
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Bias Result Styles
+.bias-card {
+  border-left: 5px solid;
+  animation: slideIn 0.5s ease;
+  
+  &.bullish {
+    border-left-color: $success-color;
+    background: linear-gradient(to right, rgba(25, 135, 84, 0.05), transparent);
+  }
+  
+  &.bearish {
+    border-left-color: $danger-color;
+    background: linear-gradient(to right, rgba(220, 53, 69, 0.05), transparent);
+  }
+  
+  &.neutral {
+    border-left-color: $warning-color;
+    background: linear-gradient(to right, rgba(255, 193, 7, 0.05), transparent);
+  }
+}
+
+.badge-custom {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 20px;
+}
+
+// Animations
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+// History Table
+.history-table {
+  font-size: 0.9rem;
+  
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+  }
+  
+  tr {
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(13, 110, 253, 0.05);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+}
+
+// Checklist enhancements
+.form-check-input:checked {
+  background-color: $success-color;
+  border-color: $success-color;
+}
+
+// Alert styling
+.alert {
+  border-radius: 12px;
+  border: none;
+}
+// Chart Container Styles
+#chartContainer {
+    background: #ffffff;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  // Chart card enhancements
+  .card-body {
+    position: relative;
+  }
+  
+  // Responsive chart
+  @media (max-width: 768px) {
+    #chartContainer {
+      height: 300px !important;
+    }
+  }
+  
+  // Legend styling
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.25rem;
+  }
+  
