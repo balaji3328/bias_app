@@ -60,7 +60,7 @@ export class ChartManager {
     });
 
     this.setupResizeObserver();
-  }
+  }                                                                                                                                                                                                                                                                                                                                                     
 
   /* =========================
      RESPONSIVE RESIZE
