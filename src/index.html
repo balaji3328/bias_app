@@ -1,218 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Bias Finder & Checklist</title>
-    <link rel="stylesheet" href="./scss/styles.scss">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Bias Finder & Checklist</title>
+  <link rel="stylesheet" href="./scss/styles.scss">
 </head>
-
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">
-                <i class="bi bi-graph-up-arrow"></i> Trading Bias Finder
-            </span>
-            <button class="btn btn-outline-light btn-sm" id="clearHistoryBtn">
-                <i class="bi bi-trash"></i> Clear History
-            </button>
-        </div>
-    </nav>
-
-    <div class="container my-5">
-        <!-- Hero Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="alert alert-info" role="alert">
-                    <h5 class="alert-heading"><i class="bi bi-info-circle"></i> How It Works</h5>
-                    <p class="mb-0">Enter previous two days' OHLC (Open, High, Low, Close) data. The app analyzes candle patterns, price structure, and liquidity sweeps to forecast TODAY's optimal trading bias and setups.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Input Form Section -->
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="bi bi-calculator"></i> OHLC Price Data Input</h5>
-                        <small>Enter previous 2 days' Open, High, Low, Close to forecast TODAY's bias</small>
-                    </div>
-                    <div class="card-body">
-                        <form id="biasForm">
-                            <!-- Day Before Previous Day -->
-                            <div class="mb-4">
-                                <h6 class="text-muted mb-3">📅 Day Before Previous Day (D-2)</h6>
-                                <div class="row">
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="dbpdOpen" class="form-label fw-bold">Open</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdOpen" required placeholder="1.1000">
-                                    </div>
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="dbpdHigh" class="form-label fw-bold text-success">High</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdHigh" required placeholder="1.1050">
-                                    </div>
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="dbpdLow" class="form-label fw-bold text-danger">Low</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdLow" required placeholder="1.0980">
-                                    </div>
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="dbpdClose" class="form-label fw-bold">Close</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdClose" required placeholder="1.1020">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Previous Day -->
-                            <div class="mb-4">
-                                <h6 class="text-muted mb-3">📅 Previous Day (D-1 / Yesterday)</h6>
-                                <div class="row">
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="pdOpen" class="form-label fw-bold">Open</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="pdOpen" required placeholder="1.1020">
-                                    </div>
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="pdHigh" class="form-label fw-bold text-success">High</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="pdHigh" required placeholder="1.1080">
-                                    </div>
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="pdLow" class="form-label fw-bold text-danger">Low</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="pdLow" required placeholder="1.0990">
-                                    </div>
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <label for="pdClose" class="form-label fw-bold">Close</label>
-                                        <input type="number" step="0.00001" class="form-control form-control-sm" id="pdClose" required placeholder="1.1070">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Symbol Input -->
-                            <div class="mb-3">
-                                <label for="symbol" class="form-label">Symbol (Optional)</label>
-                                <input type="text" class="form-control" id="symbol" placeholder="e.g., EURUSD, GBPUSD, SPY">
-                            </div>
-
-                            <div class="alert alert-warning" role="alert">
-                                <small><strong>💡 Tip:</strong> The app analyzes candle patterns (bullish/bearish), price structure, and liquidity sweeps to forecast today's optimal trading bias.</small>
-                            </div>
-
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-graph-up"></i> Forecast Today's Bias
-                                </button>
-                                <button type="reset" class="btn btn-outline-secondary">
-                                    <i class="bi bi-arrow-clockwise"></i> Reset Form
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Results Section -->
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-clipboard-check"></i> Bias Analysis & Forecast</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="resultsContainer">
-                            <div class="text-center text-muted py-5">
-                                <i class="bi bi-graph-up" style="font-size: 3rem;"></i>
-                                <p class="mt-3">Enter OHLC data to see bias forecast</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trading Checklist -->
-                <div class="card shadow mt-4">
-                    <div class="card-header bg-warning text-dark">
-                        <h5 class="mb-0"><i class="bi bi-list-check"></i> Pre-Trade Checklist</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check1">
-                            <label class="form-check-label" for="check1">
-                                Bias direction confirmed
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check2">
-                            <label class="form-check-label" for="check2">
-                                Risk-reward ratio acceptable (min 1:2)
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check3">
-                            <label class="form-check-label" for="check3">
-                                Stop loss level identified
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check4">
-                            <label class="form-check-label" for="check4">
-                                Entry point matches order block/FVG
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check5">
-                            <label class="form-check-label" for="check5">
-                                Market structure aligns with bias
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check6">
-                            <label class="form-check-label" for="check6">
-                                Economic calendar checked
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="check7">
-                            <label class="form-check-label" for="check7">
-                                Position size calculated
-                            </label>
-                        </div>
-                        <button class="btn btn-sm btn-outline-secondary mt-3 w-100" id="resetChecklistBtn">
-                            Reset Checklist
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analysis History -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card shadow">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Analysis History</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="historyContainer">
-                            <p class="text-muted text-center">No analysis history yet</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Navigation -->
+  <nav class="navbar navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">
+        <i class="bi bi-graph-up-arrow"></i> Trading Bias Finder
+      </span>
+      <button class="btn btn-outline-light btn-sm" id="clearHistoryBtn">
+        <i class="bi bi-trash"></i> Clear History
+      </button>
     </div>
+  </nav>
 
-    <!-- Footer -->
-    <footer class="bg-light py-4 mt-5">
-        <div class="container text-center text-muted">
-            <small>Trading Bias Finder | Built with Vite.js & Bootstrap</small>
+  <div class="container-fluid my-4">
+   
+
+    <div class="row">
+      <!-- LEFT SIDE: Static OHLC Input Form -->
+      <div class="col-lg-5 col-xl-4">
+        <div class="sticky-sidebar">
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="bi bi-calculator"></i> OHLC Price Data Input</h5>
+            </div>
+            <div class="card-body">
+              <form id="biasForm">
+                <!-- Day Before Previous Day -->
+                <div class="mb-4">
+                  <h6 class="text-muted mb-3">📅 Day Before Previous (D-2)</h6>
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label for="dbpdOpen" class="form-label fw-bold">Open</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdOpen" required placeholder="1.1000">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="dbpdHigh" class="form-label fw-bold text-success">High</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdHigh" required placeholder="1.1050">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="dbpdLow" class="form-label fw-bold text-danger">Low</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdLow" required placeholder="1.0980">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="dbpdClose" class="form-label fw-bold">Close</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="dbpdClose" required placeholder="1.1020">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Previous Day -->
+                <div class="mb-4">
+                  <h6 class="text-muted mb-3">📅 Previous Day (D-1 / Yesterday)</h6>
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label for="pdOpen" class="form-label fw-bold">Open</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="pdOpen" required placeholder="1.1020">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="pdHigh" class="form-label fw-bold text-success">High</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="pdHigh" required placeholder="1.1080">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="pdLow" class="form-label fw-bold text-danger">Low</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="pdLow" required placeholder="1.0990">
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label for="pdClose" class="form-label fw-bold">Close</label>
+                      <input type="number" step="0.00001" class="form-control form-control-sm" id="pdClose" required placeholder="1.1070">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Symbol Input -->
+                <div class="mb-3">
+                  <label for="symbol" class="form-label">Symbol (Optional)</label>
+                  <input type="text" class="form-control" id="symbol" placeholder="e.g., EURUSD, GBPUSD, SPY">
+                </div>
+
+                <div class="alert alert-warning" role="alert">
+                  <small><strong>💡 Tip:</strong> The app analyzes candle patterns (bullish/bearish), price structure, and liquidity sweeps to forecast today's optimal trading bias.</small>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-graph-up"></i> Forecast Today's Bias
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-clockwise"></i> Reset Form
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-    </footer>
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+      </div>
 
-<!-- Lightweight Charts CDN -->
-<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+      <!-- RIGHT SIDE: Scrollable Results & Analysis -->
+      <div class="col-lg-7 col-xl-8">
+        <div class="scrollable-content">
+          <!-- Results Section -->
+          <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0"><i class="bi bi-clipboard-check"></i> Bias Analysis & Forecast</h5>
+            </div>
+            <div class="card-body">
+              <div id="resultsContainer">
+                <div class="text-center text-muted py-5">
+                  <i class="bi bi-graph-up" style="font-size: 3rem;"></i>
+                  <p class="mt-3">Enter OHLC data to see bias forecast</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<script type="module" src="/js/main.js"></script>
+          <!-- Trading Checklist -->
+          <div class="card shadow mb-4">
+            <div class="card-header bg-warning text-dark">
+              <h5 class="mb-0"><i class="bi bi-list-check"></i> Pre-Trade Checklist</h5>
+            </div>
+            <div class="card-body">
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check1">
+                <label class="form-check-label" for="check1">
+                  Bias direction confirmed
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check2">
+                <label class="form-check-label" for="check2">
+                  Risk-reward ratio acceptable (min 1:2)
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check3">
+                <label class="form-check-label" for="check3">
+                  Stop loss level identified
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check4">
+                <label class="form-check-label" for="check4">
+                  Entry point matches order block/FVG
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check5">
+                <label class="form-check-label" for="check5">
+                  Market structure aligns with bias
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check6">
+                <label class="form-check-label" for="check6">
+                  Economic calendar checked
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="check7">
+                <label class="form-check-label" for="check7">
+                  Position size calculated
+                </label>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary mt-3 w-100" id="resetChecklistBtn">
+                <i class="bi bi-arrow-clockwise"></i> Reset Checklist
+              </button>
+            </div>
+          </div>
 
+          <!-- Analysis History -->
+          <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+              <h5 class="mb-0"><i class="bi bi-clock-history"></i> Analysis History</h5>
+            </div>
+            <div class="card-body">
+              <div id="historyContainer">
+                <p class="text-muted text-center">No analysis history yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  
+  <!-- Lightweight Charts CDN -->
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  
+  <script type="module" src="./js/main.js"></script>
 </body>
-
 </html>
