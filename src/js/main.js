@@ -12,7 +12,237 @@ const biasForm = document.getElementById('biasForm');
 const resultsContainer = document.getElementById('resultsContainer');
 const historyContainer = document.getElementById('historyContainer');
 const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-const resetChecklistBtn = document.getElementById('resetChecklistBtn');
+
+/**
+ * Update checklist based on bias - FIXED SELECTOR
+ */
+function updateChecklistByBias(bias) {
+  // Find the checklist card body - more specific selector
+  const checklistCards = document.querySelectorAll('.card');
+  let checklistCard = null;
+  
+  // Find the card with "Pre-Trade Checklist" header
+  checklistCards.forEach(card => {
+    const header = card.querySelector('.card-header');
+    if (header && header.textContent.includes('Pre-Trade Checklist')) {
+      checklistCard = card;
+    }
+  });
+  
+  if (!checklistCard) {
+    console.error('Checklist card not found');
+    return;
+  }
+  
+  const checklistBody = checklistCard.querySelector('.card-body');
+  
+  if (!checklistBody) {
+    console.error('Checklist card body not found');
+    return;
+  }
+  
+  let checklistHTML = '';
+  
+  if (bias.includes('BULLISH')) {
+    // BUY Checklist
+    checklistHTML = `
+      <div class="alert alert-success mb-3">
+        <strong>🟢 BUY SETUP CHECKLIST</strong>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check1">
+        <label class="form-check-label" for="check1">
+          <strong>Asian's Low 2H FVG Identified:</strong> Locate unmitigated 2H FVG formed at Asian session low
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check2">
+        <label class="form-check-label" for="check2">
+          <strong>London Tap Confirmation:</strong> Price should tap the 2H FVG during London session
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check3">
+        <label class="form-check-label" for="check3">
+          <strong>Shift Confirmation Received:</strong> After tap, look for bullish market structure shift (BOS/CHoCH)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check4">
+        <label class="form-check-label" for="check4">
+          <strong>Inner Block Located:</strong> Inside 2H FVG, identify unmitigated lower timeframe order block (15m/5m)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check5">
+        <label class="form-check-label" for="check5">
+          <strong>Good Displacement Present:</strong> Strong bullish candle with minimal wicks after tap
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check6">
+        <label class="form-check-label" for="check6">
+          Risk-reward ratio acceptable (min 1:2)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check7">
+        <label class="form-check-label" for="check7">
+          Stop loss below FVG/Order Block
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check8">
+        <label class="form-check-label" for="check8">
+          Economic calendar checked for news conflicts
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check9">
+        <label class="form-check-label" for="check9">
+          Position size calculated (max 1-2% risk)
+        </label>
+      </div>
+    `;
+  } else if (bias.includes('BEARISH')) {
+    // SELL Checklist
+    checklistHTML = `
+      <div class="alert alert-danger mb-3">
+        <strong>🔴 SELL SETUP CHECKLIST</strong>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check1">
+        <label class="form-check-label" for="check1">
+          <strong>Asian's High 2H FVG Identified:</strong> Locate unmitigated 2H FVG formed at Asian session high
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check2">
+        <label class="form-check-label" for="check2">
+          <strong>London Tap Confirmation:</strong> Price should tap the 2H FVG during London session
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check3">
+        <label class="form-check-label" for="check3">
+          <strong>Shift Confirmation Received:</strong> After tap, look for bearish market structure shift (BOS/CHoCH)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check4">
+        <label class="form-check-label" for="check4">
+          <strong>Inner Block Located:</strong> Inside 2H FVG, identify unmitigated lower timeframe order block (15m/5m)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check5">
+        <label class="form-check-label" for="check5">
+          <strong>Good Displacement Present:</strong> Strong bearish candle with minimal wicks after tap
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check6">
+        <label class="form-check-label" for="check6">
+          Risk-reward ratio acceptable (min 1:2)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check7">
+        <label class="form-check-label" for="check7">
+          Stop loss above FVG/Order Block
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check8">
+        <label class="form-check-label" for="check8">
+          Economic calendar checked for news conflicts
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check9">
+        <label class="form-check-label" for="check9">
+          Position size calculated (max 1-2% risk)
+        </label>
+      </div>
+    `;
+  } else {
+    // NEUTRAL - Default Checklist
+    checklistHTML = `
+      <div class="alert alert-warning mb-3">
+        <strong>⚠️ NEUTRAL - GENERAL CHECKLIST</strong>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check1">
+        <label class="form-check-label" for="check1">
+          Bias direction confirmed
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check2">
+        <label class="form-check-label" for="check2">
+          Risk-reward ratio acceptable (min 1:2)
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check3">
+        <label class="form-check-label" for="check3">
+          Stop loss level identified
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check4">
+        <label class="form-check-label" for="check4">
+          Entry point matches order block/FVG
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check5">
+        <label class="form-check-label" for="check5">
+          Market structure aligns with bias
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check6">
+        <label class="form-check-label" for="check6">
+          Economic calendar checked
+        </label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="check7">
+        <label class="form-check-label" for="check7">
+          Position size calculated
+        </label>
+      </div>
+    `;
+  }
+  
+  // Add reset button
+  checklistHTML += `
+    <button class="btn btn-sm btn-outline-secondary mt-3 w-100" id="resetChecklistBtn">
+      <i class="bi bi-arrow-clockwise"></i> Reset Checklist
+    </button>
+  `;
+  
+  // Update the checklist
+  checklistBody.innerHTML = checklistHTML;
+  
+  // Re-attach event listeners
+  const newCheckboxes = checklistBody.querySelectorAll('.form-check-input');
+  newCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', saveChecklistState);
+  });
+  
+  // Re-attach reset button listener
+  const newResetBtn = document.getElementById('resetChecklistBtn');
+  if (newResetBtn) {
+    newResetBtn.addEventListener('click', handleResetChecklist);
+  }
+  
+  // Load saved state
+  loadChecklistState();
+  
+  console.log('✅ Checklist updated to:', bias);
+}
 
 /**
  * Initialize the application
@@ -27,7 +257,11 @@ function init() {
   // Event listeners
   biasForm.addEventListener('submit', handleFormSubmit);
   clearHistoryBtn.addEventListener('click', handleClearHistory);
-  resetChecklistBtn.addEventListener('click', handleResetChecklist);
+  
+  const resetChecklistBtn = document.getElementById('resetChecklistBtn');
+  if (resetChecklistBtn) {
+    resetChecklistBtn.addEventListener('click', handleResetChecklist);
+  }
   
   // Checklist auto-save
   const checkboxes = document.querySelectorAll('.form-check-input');
@@ -66,6 +300,11 @@ function handleFormSubmit(e) {
   
   // Display results
   displayResults(analysis, formData);
+  
+  // ✅ UPDATE CHECKLIST BASED ON BIAS - with delay to ensure DOM is ready
+  setTimeout(() => {
+    updateChecklistByBias(analysis.bias);
+  }, 100);
   
   // Save to history
   storage.saveAnalysis(formData, analysis);
@@ -169,8 +408,8 @@ function displayResults(analysis, data) {
             <strong>Lines:</strong> 
             <span style="color: #26a69a;">━━</span> PD High | 
             <span style="color: #ef5350;">━━</span> PD Low | 
-            <span style="color: #4CAF50;">┅┅</span> Buy Zone | 
-            <span style="color: #F44336;">┅┅</span> Sell Zone
+            <span style="color: #4CAF50;">┄┄</span> Buy Zone | 
+            <span style="color: #F44336;">┄┄</span> Sell Zone
           </small>
         </div>
       </div>
@@ -205,7 +444,6 @@ function displayResults(analysis, data) {
       </div>
 
       <hr>
-
       <div class="alert alert-info mb-3">
         <strong>💡 Trading Plan:</strong> ${analysis.recommendation}
       </div>
